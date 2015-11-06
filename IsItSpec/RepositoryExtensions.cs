@@ -6,22 +6,24 @@ namespace IsItSpec
 {
     internal static class RepositoryExtensions
     {
-        public static Commit MergeBaseCommit(this IRepository repo, List<string> commitIds)
+        public static Commit ResolveMergeBaseCommit(this IRepository repo, List<string> commitIds)
         {
             var commits = repo.LookupCommits(commitIds);
 
-            if (commits.Count < 2)
+            if (commits.Count < 1)
             {
-                throw new ArgumentException("At least 2 valid commits needed to find the merge base, not enough were found in " + string.Join(",", commitIds));
+                throw new ArgumentException("At least valid commit needed to find the merge base, none were found in " + string.Join(",", commitIds));
             }
 
-            var mergeBaseCommit = repo.Commits.FindMergeBase(commits, MergeBaseFindingStrategy.Standard);
-            return mergeBaseCommit;
+            commits.Add(repo.Head.Tip);
+
+            return repo.Commits.FindMergeBase(commits, MergeBaseFindingStrategy.Standard);
         }
 
         public static List<Commit> LookupCommits(this IRepository repo, List<string> commitIds)
         {
             var commits = new List<Commit>();
+
             commitIds.ForEach(commitId =>
             {
                 var commit = repo.Lookup<Commit>(commitId);
@@ -30,8 +32,9 @@ namespace IsItSpec
                     commits.Add(commit);
                 }
             });
+
             return commits;
         }
- 
+
     }
 }
