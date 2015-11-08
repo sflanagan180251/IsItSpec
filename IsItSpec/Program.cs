@@ -36,11 +36,11 @@ namespace IsItSpec
                     var testableClassesPossiblyMissingSpecs = testable.Where(testablePatchEntryChange => !testableClassesMissingSpecFiles.Contains(testablePatchEntryChange) && !IsTested(testablePatchEntryChange, GetPossibleSpecs(testablePatchEntryChange, specs)));
 
                     Console.WriteLine();
-                    Console.WriteLine("Total changes");
+                    Console.WriteLine("All changes");
                     patch.ForEach(patchEntryChanges => Console.WriteLine(patchEntryChanges.Status + " -> " + patchEntryChanges.Path));
 
                     Console.WriteLine();
-                    Console.WriteLine("Total valid changes");
+                    Console.WriteLine("Changes with valid change status of " + string.Join(", ", ValidChangeStatuses.ToList().ConvertAll(validChangeStatus => validChangeStatus.ToString())));
                     valid.ForEach(patchEntryChanges => Console.WriteLine(patchEntryChanges.Status + " -> " + patchEntryChanges.Path));
 
                     Console.WriteLine();
@@ -48,15 +48,15 @@ namespace IsItSpec
                     testable.ForEach(patchEntryChanges => Console.WriteLine(patchEntryChanges.Status + " -> " + patchEntryChanges.Path));
 
                     Console.WriteLine();
-                    Console.WriteLine("spec changes");
+                    Console.WriteLine("specs found");
                     specs.ForEach(patchEntryChanges => Console.WriteLine(patchEntryChanges.Status + " -> " + patchEntryChanges.Path));
 
                     Console.WriteLine();
-                    Console.WriteLine("missing specs");
+                    Console.WriteLine("testable classes with missing specs");
                     testableClassesMissingSpecFiles.ForEach(patchEntryChanges => Console.WriteLine(patchEntryChanges.Status + " -> " + patchEntryChanges.Path));
 
                     Console.WriteLine();
-                    Console.WriteLine("possibly missing specs");
+                    Console.WriteLine("testable classes with possibly missing specs");
                     testableClassesPossiblyMissingSpecs.ForEach(patchEntryChanges => Console.WriteLine(patchEntryChanges.Status + " -> " + patchEntryChanges.Path));
                 }
             }
